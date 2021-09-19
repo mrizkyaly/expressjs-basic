@@ -1,5 +1,5 @@
-const { ObjectId } = require('bson');
 const express = require('express');
+const { ObjectId } = require('mongodb');
 const router = express.Router();
 const connection = require('./connection');
 
@@ -73,14 +73,15 @@ router.delete('/users/:id', async (req, res) => {
     try {
         if (connection.connect) {
             const { id } = req.params;
+            const { name, age, status } = req.body;
             const db = connection.db('db_latihan');
             const users = await db
                 .collection('users')
                 .deleteOne({ _id: ObjectId(id) });
             if (users.deletedCount === 1) {
-                res.send({ message: 'berhasil diubah' });
+                res.send({ message: 'berhasil dihapus' });
             } else {
-                res.send({ message: 'gagal mengubah' });
+                res.send({ message: 'gagal menghapus' });
             }
         } else {
             res.send({ message: 'koneksi database gagal' });
